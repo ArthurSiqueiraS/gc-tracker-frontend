@@ -1,0 +1,16 @@
+.char-tracker {
+  width: 10%;
+  height: 50vh;
+
+  .char-header {
+    height: 16%;
+    object-fit: cover;
+    background-size: contain;
+  }
+
+  .trackers {
+    display: flex;
+    flex-wrap: wrap;
+    height: 84%;
+  }
+}
