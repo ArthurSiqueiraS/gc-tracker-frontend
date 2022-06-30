@@ -19,11 +19,7 @@ const Stars = ({ totalStars, markedStars, onClick }) => {
       /> : 
       <MdOutlineStarOutline 
         key={i} 
-        onClick={() => onClick(i + 1, (i + 1 === totalStars) ? {
-            transition: '1.5s',
-            transform: 'rotateY(270deg)', 
-          } : {})
-        } 
+        onClick={() => onClick(i + 1)} 
         style={{ fill: starColor }} 
       />
     )
@@ -33,7 +29,6 @@ const Stars = ({ totalStars, markedStars, onClick }) => {
 }
 
 const TrackerCard = ({ challenge, useDefaultStyle }) => {
-  const [trackerStyle, setTrackerStyle] = useState({})
   const [localChallenge, setLocalChallenge] = useState(challenge)
 
   const { 
@@ -43,7 +38,6 @@ const TrackerCard = ({ challenge, useDefaultStyle }) => {
     char_id: charID,
   } = localChallenge
 
-  const defaultStyle = { margin: completedTimes === completionTimes && '5px 10px' }
   const layerNames = ['hidden', 'blurred', 'desaturated']
   if (completionTimes === 2) {
     layerNames.splice(1, 1)
@@ -52,17 +46,35 @@ const TrackerCard = ({ challenge, useDefaultStyle }) => {
     layerNames.splice(1, 2)
   } 
 
-  const handleStarClick = (mark, style={}) => {
+  const handleStarClick = (mark) => {
     markChallenge(charID, challengeID, mark).then(response => {
       setLocalChallenge(response.data)
     })
-    setTrackerStyle(style)
   } 
+
+  const trackerCompleted = () => {
+    return completedTimes === completionTimes
+  }
+
+  const getTrackerStyle = () => {
+    if (useDefaultStyle) {
+      return { margin: trackerCompleted() && '5px 10px' }
+    }
+
+    if (trackerCompleted()) {
+      return {
+        transition: '1.5s',
+        transform: 'rotateY(270deg)', 
+      }
+    }
+
+    return {}
+  }
 
   return (
     <div 
       className={`tracker ${localChallenge.identifier} ${layerNames[completedTimes]}`}
-      style={useDefaultStyle ? defaultStyle : trackerStyle}
+      style={getTrackerStyle()}
     >
       <div className="stars">
         <Stars onClick={handleStarClick} totalStars={completionTimes} markedStars={completedTimes} />
