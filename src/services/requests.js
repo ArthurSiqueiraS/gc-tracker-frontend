@@ -3,9 +3,9 @@ const axios = require('axios')
 let baseURL
 
 if (process.env.NODE_ENV === 'development') {
-  baseURL = 'https://gc-tracker.herokuapp.com/'
-} else {
   baseURL = 'http://localhost:8000/'
+} else {
+  baseURL = 'https://gc-tracker.herokuapp.com/'
 }
 
 const client = axios.create({
