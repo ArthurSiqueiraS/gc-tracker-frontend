@@ -1,5 +1,17 @@
 const axios = require('axios')
 
+let baseURL
+
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://localhost:8000/'
+} else {
+  baseURL = 'https://gc-tracker.herokuapp.com/'
+}
+
+const client = axios.create({
+  baseURL
+})
+
 const challenges = {
   fornalha: { name: 'Fornalha Infernal', completionTimes: 2, completedTimes: 0 },
   altar: { name: 'Altar da Ruína', completionTimes: 2, completedTimes: 0 },
@@ -33,15 +45,15 @@ const chars = {
 }
 
 export const fetchChars = () => {
-  return axios.get('http://localhost:8000/chars')
+  return client.get('/chars')
 }
 
 export const fetchChallenges = () => {
-  return axios.get('http://localhost:8000/challenges')
+  return client.get('/challenges')
 }
 
 export const markChallenge = (char, challenge, marks) => {
-  return axios.post(`http://localhost:8000/chars/${char}/mark_challenge`, {
+  return client.post(`/chars/${char}/mark_challenge`, {
     challenge,
     marks,
   })
